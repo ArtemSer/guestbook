@@ -1,65 +1,277 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script th:src="@{/resources/js/guestbook.js}"></script>
-		<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css" />
-		<link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" type="text/css" />
-		<link rel="stylesheet" th:href="@{/resources/css/style.css}" type="text/css" />
-		<title th:text="#{guestbook.title}">Gästebuch</title>
-	</head>
-	<body>
-		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
-	
-		<div class="checkbox text-center">
-			<input type="checkbox" id="use_ajax" />
-			<label for="use_ajax" th:text="#{guestbook.useajax}">Ajax nutzen</label>
-		</div>
-		
-		<div class="text-center">
-			<a sec:authorize="isAnonymous()" href="/login">Login</a>
-			<a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
-		</div>
-		
-		<br />
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resources/css/vendor.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resources/css/responsive.css}" type="text/css"/>
+    <title th:text="#{guestbook.title}">Guestbook</title>
+</head>
+<body>
+<button id="return-to-top"><span class="text-gray-extra-dark">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 2048 2048">
+        <path d="M1523 1440q0 13-10 23l-50 50q-10 10-23 10t-23-10l-393-393-393 393q-10 10-23
+        10t-23-10l-50-50q-10-10-10-23t10-23l466-466q10-10 23-10t23 10l466 466q10 10 10 23zm0-384q0 13-10
+        23l-50 50q-10 10-23 10t-23-10l-393-393-393 393q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l466-466q10-10
+        23-10t23 10l466 466q10 10 10 23z"></path>
+    </svg>
+</span></button>
+<div class="fullscreen">
 
-		<div id="entries" class="mx-auto">			
-			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
-				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">
-					<div class="card-header">
-						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
-							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
-								<span class="fas fa-times"></span>
-							</button>
-						</form>
-						<h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
-					</div>
-					<div class="card-body">
-						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
-					</div>
-					<div class="card-footer">
-						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
-					</div>
-				</div>
-			</div>
-		</div>
+    <!-- Row -->
+    <div class="row no-margin no-padding">
+        <!-- Column -->
+        <div class="col-lg-6 col-xs-12 no-margin no-padding">
+            <!-- Image -->
+            <div class="bg-image"></div>
+            <!-- End Image -->
+        </div>
+        <!-- End Column -->
 
-	
-		<form method="post" role="form" class="gb-form" id="form" th:action="@{/guestbook}" th:object="${form}">
-			<div class="form-group">
-				<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
-				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
-				<div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:text="#{guestbook.form.name.required}">Please provide a name.</div> 
-			</div>
-			<div class="form-group">
-				<label for="text" th:text="#{guestbook.form.text}">Text</label><br /> 
-				<textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" required="required"></textarea>
-				<div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
-			</div>
-			<input type="submit" class="btn btn-secondary" th:value="#{guestbook.form.submit}" value="Senden" />
-		</form>
+        <!-- Column -->
+        <div class="col-lg-6 col-xs-12 intro">
 
-	</body>
+            <!-- Container -->
+            <div class="container">
+
+                <!-- Row -->
+                <div class="row">
+
+                    <!-- Product Description Column -->
+                    <div class="col-lg-8 col-xs-12 center-col text-left md-text-center">
+
+                        <h2 class="text-weight-200 text-gray-extra-dark">
+                            Welcome to
+                            <span class="text-weight-800">GuestBook</span>
+                            below you can find some writes
+                        </h2>
+                        <button id="more" class="btn btn-large btn-black ">
+                            Read More
+                        </button>
+                        <a sec:authorize="isAnonymous()" class="btn btn-large btn-gold " href="/login">
+                            Login
+                        </a>
+                        <a sec:authorize="isAuthenticated()" class="btn btn-large btn-gold" href="/logout">
+                            Logout
+                        </a>
+
+                    </div>
+                    <!-- End Product Description Column -->
+
+                </div>
+                <!-- End Row -->
+
+            </div>
+            <!-- End Container -->
+
+        </div>
+        <!-- End Column -->
+
+    </div>
+    <!-- End Row -->
+
+</div>
+<section id="topics">
+
+    <!-- Container -->
+    <div class="container-small">
+
+        <!-- Row -->
+        <div class="row" id="entries">
+
+            <!-- Column -->
+            <div th:each="entry, it : ${entries}" th:with="index = ${it.count} "
+                 class="col-md-12 col-sm-12 col-xs-12 margin-bottom-75px text-left uk-scrollspy-inview uk-animation-slide-bottom">
+                <div th:fragment="entry" th:id="entry+${entry.id}">
+                    <!-- Title -->
+                    <h3 th:text="${index} + '. ' + ${entry.name}"
+                        class="text-weight-200 text-black sm-text-weight-400">
+                        Test
+                    </h3>
+
+                    <!-- Post Information -->
+                    <p class="text-small margin-bottom-25px">
+                        <span data-uk-icon="icon: clock; ratio: 1"
+                              class="margin-right-10px text-black position-relative bottom-1 uk-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                 data-svg="clock">
+                                <circle fill="none" stroke="#000" stroke-width="1.1" cx="10" cy="10" r="9"></circle>
+                                <rect x="9" y="4" width="1" height="7"></rect>
+                                <path fill="none" stroke="#000" stroke-width="1.1"
+                                      d="M13.018,14.197 L9.445,10.625"></path>
+                            </svg>
+                        </span>
+                        <span class="margin-right-20px"
+                              th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">
+                            Posted on Date
+                        </span>
+
+                        <span class="margin-right-10px text-black position-relative bottom-1 uk-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                 data-svg="menu">
+                                <rect x="2" y="4" width="16" height="1"></rect>
+                                <rect x="2" y="9" width="16" height="1"></rect>
+                                <rect x="2" y="14" width="16" height="1"></rect>
+                            </svg>
+                        </span>
+                        <span class="margin-right-20px" th:text="${entry.topic}">Web App</span>
+
+                        <span data-uk-icon="icon: user; ratio: 1"
+                              class="margin-right-10px text-black position-relative bottom-1 uk-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                 data-svg="user">
+                                <circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4" r="4.4"></circle>
+                                <path fill="none" stroke="#000" stroke-width="1.1"
+                                      d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>
+                            </svg>
+                        </span>
+                        <span th:text="${entry.author}">John Doe</span>
+                    </p>
+                    <!-- End Post Information -->
+
+                    <!-- Post Excerpt -->
+                    <p class="text-gray-dark text-weight-400 margin-bottom-25px" th:text="${entry.text}">
+                        Text not found
+                    </p>
+
+                    <!-- Button -->
+                    <form sec:authorize="hasRole('ADMIN')" th:method="delete"
+                          th:action="@{/guestbook/{id}(id=${entry.id})}"
+                          th:attr="data-entry-id=${entry.id}">
+                        <button th:title="#{guestbook.form.delete}" class="btn btn-large btn-black"
+                                href="blog-post-sidebar-right.html">Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- End Column -->
+        </div>
+        <!-- End Row -->
+    </div>
+    <!-- End Container -->
+</section>
+
+<section id="contact">
+    <!-- Container -->
+    <div class="container">
+        <!-- Row -->
+        <div class="row">
+            <!-- Column -->
+            <div class="col-md-12 col-sm-12 col-xs-12 center-col text-center margin-auto uk-scrollspy-inview uk-animation-slide-bottom-medium"
+                 style="">
+                <h4 class="no-margin-bottom text-weight-200 text-gray-extra-dark">Leave your <span
+                        class="text-weight-800">word </span> in history.</h4>
+                <div class="separator bottom-border center-col border-1px border-color-gray-light"></div>
+                <p class="text-medium text-weight-400 no-margin-bottom text-gray-dark">Just write below your review and
+                    hit the button</p>
+            </div>
+            <!-- End Column -->
+        </div>
+        <!-- End Row -->
+
+        <!-- Contact Container -->
+        <div class="container contact-wrapper">
+            <!-- Form Container -->
+            <form class="contact-form text-left" method="post" role="form" id="form" th:action="@{/guestbook}"
+                  th:object="${form}">
+                <!-- Form Controls -->
+                <div class="controls">
+                    <!-- Row -->
+                    <div class="row">
+                        <!-- Column -->
+                        <div class="col-md-4 col-xs-12 uk-scrollspy-inview uk-animation-slide-bottom-medium">
+                            <!-- Form Group -->
+                            <div class="form-group">
+                                <p class="text-small text-weight-400 margin-bottom-10px">Username or Full Name</p>
+                                <!-- Input -->
+                                <input class="form-control form_name no-margin-top  text-small text-gray-extra-dark text-weight-400 roboto border-color-gray-extra-light"
+                                       type="text" th:field="*{author}" th:errorclass="is-invalid" name="author"
+                                       placeholder="i.e. Jason Exeml" required="required">
+                            </div>
+                            <!-- End Form Group -->
+                        </div>
+                        <!-- End Column -->
+                        <!-- Column -->
+                        <div class="col-md-4 col-xs-12 uk-scrollspy-inview uk-animation-slide-bottom-medium">
+                            <!-- Form Group -->
+                            <div class="form-group">
+                                <p class="text-small text-weight-400 margin-bottom-10px">Topic</p>
+                                <!-- Input -->
+                                <input class="form-control form_name no-margin-top  text-small text-gray-extra-dark text-weight-400 roboto border-color-gray-extra-light"
+                                       type="text" th:field="*{topic}" th:errorclass="is-invalid" name="topic"
+                                       placeholder="i.e. Java EE">
+                            </div>
+                            <!-- End Form Group -->
+                        </div>
+                        <div class="col-md-4 col-xs-12 uk-scrollspy-inview uk-animation-slide-bottom-medium">
+                            <!-- Form Group -->
+                            <div class="form-group">
+                                <p class="text-small text-weight-400 margin-bottom-10px">Title</p>
+                                <!-- Input -->
+                                <input class="form-control form_name no-margin-top  text-small text-gray-extra-dark text-weight-400 roboto border-color-gray-extra-light"
+                                       type="text" th:field="*{name}" th:errorclass="is-invalid" name="name"
+                                       placeholder="i.e. Java EE">
+                            </div>
+                            <!-- End Form Group -->
+                        </div>
+                        <!-- End Column -->
+                    </div>
+                    <!-- End Row -->
+
+                    <!-- Row -->
+                    <div class="row">
+
+                        <!-- Column -->
+                        <div class="col-md-12 uk-scrollspy-inview uk-animation-slide-bottom-medium" style="">
+
+                            <!-- Form Group -->
+                            <div class="form-group">
+
+                                <p class="text-small text-weight-400 margin-bottom-10px">Your Messages *</p>
+
+                                <!-- Input -->
+                                <textarea
+                                        class="form-control form_message no-margin-top  text-small text-gray-extra-dark text-weight-400 roboto border-color-gray-extra-light"
+                                        name="message" placeholder="Your message here" rows="6" required="required"
+                                        th:field="*{text}" th:errorclass="is-invalid"></textarea>
+                            </div>
+                            <!-- End Form Group -->
+
+                        </div>
+                        <!-- End Column -->
+
+
+                        <!-- Column -->
+                        <div class="col-md-12 text-center uk-scrollspy-inview uk-animation-slide-bottom-medium"
+                             style="">
+
+                            <!-- Input -->
+                            <input type="submit"
+                                   th:value="#{guestbook.form.submit}"
+                                   class="btn-send btn btn-large btn-black sm-margin-left-right-auto sm-display-table"
+                                   value="Save Message">
+
+                        </div>
+                        <!-- End Column -->
+
+                    </div>
+                    <!-- End Row -->
+                </div>
+                <!-- End Form Controls -->
+            </form>
+            <!-- End Form Container -->
+        </div>
+        <!-- End Contact Container -->
+
+    </div>
+    <!-- End Container -->
+
+</section>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/resources/js/guestbook.js}"></script>
+</body>
 </html>

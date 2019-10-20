@@ -1,0 +1,18 @@
+@media all and (max-width: 992px) {
+  .bg-image {
+    height: 45vh !important;
+  }
+  .md-text-center{
+    text-align: center !important;
+  }
+}
+.md-padding-top-bottom-150px {
+  padding-top: 150px!important;
+  padding-bottom: 150px !important
+}
+.md-padding-top-150px {
+  padding-top: 150px !important
+}
+.md-padding-right-15px {
+  padding-right: 15px !important
+}
